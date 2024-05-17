@@ -1,0 +1,9 @@
+[all]
+file-srv.paris.local
+dc2.lyon.paris.local
+
+[paris]
+file-srv.paris.local
+
+[lyon]
+dc2.lyon.paris.local
