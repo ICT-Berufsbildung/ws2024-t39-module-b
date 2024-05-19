@@ -26,6 +26,16 @@ variable "esx_datastore" {
   default = "datastor3_512GB"
 }
 
+variable "esx_iso_datastore" {
+  type    = string
+  default = "datastore2_1TB"
+}
+
+variable "esx_vm_network" {
+  type    = string
+  default = "VM Network"
+}
+
 source "vsphere-iso" "base" {
   CPUs         = 2
   RAM          = 2048
@@ -40,11 +50,11 @@ source "vsphere-iso" "base" {
   insecure_connection  = true
   cdrom_type           = "sata"
   iso_paths            = [
-    "[${var.esx_datastore}] ISO/debian-12.5.0-amd64-netinst.iso"
+    "[${var.esx_iso_datastore}] ISO/debian-12.5.0-amd64-netinst.iso"
   ]
   password             = var.esx_password
   ssh_password         = "AllTooWell13@"
-  ssh_username         = "root"
+  ssh_username         = "appadmin"
   storage {
     disk_size             = 32768
     disk_thin_provisioned = true
@@ -65,14 +75,12 @@ build {
     vm_name = "ANSIBLE-SRV"
     network_adapters {
       network_card = "vmxnet3"
-      network = "VM Network"
+      network = var.esx_vm_network
     }
-  }
-  provisioner "shell" {
-    inline = ["hostnamectl set-hostname ANSIBLE-SRV"]
   }
 
   provisioner "shell" {
+    execute_command = "chmod +x {{ .Path }}; echo 'AllTooWell13@' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
     script = "./scripts/prepare-ansible-srv.sh"
   }
 
@@ -84,10 +92,6 @@ build {
   provisioner "file" {
     source = "../ansible_automation/ansible.cfg"
     destination = "/opt/ansible/"
-  }
-
-  provisioner "shell" {
-    inline = ["chown -R appadmin:appadmin /opt/ansible"]
   }
 
 }
