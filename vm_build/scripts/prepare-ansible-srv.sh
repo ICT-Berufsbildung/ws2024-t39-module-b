@@ -38,7 +38,7 @@ chmod +x /tmp/zeal-cli
 su - appadmin -c 'mkdir -p /home/appadmin/.local/share/Zeal/Zeal/docsets'
 
 # Download docsets
-wget -nv -O /tmp/Ansible.tgz 'https://kapeli.com/feeds/zzz/versions/Ansible/2.14.5/Ansible.tgz'
+wget -nv -O /tmp/Ansible.tgz 'https://kapeli.com/feeds/zzz/versions/Ansible/2.15.5/Ansible.tgz'
 su - appadmin -c 'tar -xzf /tmp/Ansible.tgz -C /home/appadmin/.local/share/Zeal/Zeal/docsets'
 wget -nv -O /tmp/Python_3.tgz 'https://kapeli.com/feeds/zzz/versions/Python_3/3.9.2/Python_3.tgz'
 su - appadmin -c 'tar -xzf /tmp/Python_3.tgz -C /home/appadmin/.local/share/Zeal/Zeal/docsets'
