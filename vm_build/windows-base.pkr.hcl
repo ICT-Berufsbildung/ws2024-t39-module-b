@@ -132,6 +132,10 @@ build {
   }
 
   provisioner "powershell" {
+    script   = "scripts/win11/optimize-powershell.ps1"
+  }
+
+  provisioner "powershell" {
     inline = [
       "(New-Object System.Net.WebClient).DownloadFile('https://download.microsoft.com/download/E/9/8/E9849D6A-020E-47E4-9FD0-A023E99B54EB/requestRouter_amd64.msi', 'C:\\Users\\Administrator\\Desktop\\requestRouter_amd64.msi')",
       "(New-Object System.Net.WebClient).DownloadFile('https://download.microsoft.com/download/1/2/8/128E2E22-C1B9-44A4-BE2A-5859ED1D4592/rewrite_amd64_en-US.msi', 'C:\\Users\\Administrator\\Desktop\\rewrite_amd64_en-US.msi')",

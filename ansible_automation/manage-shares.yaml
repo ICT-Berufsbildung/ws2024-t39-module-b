@@ -4,13 +4,13 @@
   tasks:
     - name: Create AD groups
       microsoft.ad.group:
-        identity: "{{ item.key }}"
+        identity: '{{ item.key }}'
         scope: domainlocal
         members:
-          set: "{{ item.value | list }}"
-      loop: "{{ ad_groups | dict2items }}"
+          set: '{{ item.value | list }}'
+      loop: '{{ ad_groups | dict2items }}'
       loop_control:
-        label: "{{ item.key }}"
+        label: '{{ item.key }}'
 
     - name: Create file share directory
       ansible.windows.win_file:
@@ -19,37 +19,24 @@
 
     - name: Create file share directory
       ansible.windows.win_file:
-        path: "C:\project_share\{{ item.key }}"
+        path: 'C:\project_share\{{ item.key }}'
         state: directory
-      loop: "{{ file_shares | dict2items }}"
+      loop: '{{ file_shares | dict2items }}'
       loop_control:
-        label: "{{ item.key }}"
+        label: '{{ item.key }}'
 
     - name: Add NTFS permission
-      block:
-        - name: Add write permission
-          ansible.windows.win_acl:
-            user: "{{ item.value.write }}"
-            path: "C:\project_share\{{ item.key }}"
-            type: allow
-            rights: Modify
-
-        - name: Add read permission
-          ansible.windows.win_acl:
-            user: "{{ item.value.read }}"
-            path: "C:\project_share\{{ item.key }}"
-            type: allow
-            rights: ReadAndExecute
-      loop: "{{ file_shares | dict2items }}"
+      include_tasks: ntfs-permissions.yaml
+      loop: '{{ file_shares | dict2items }}'
       loop_control:
-        label: "{{ item.key }}"
+        label: '{{ item.key }}'
 
     - name: Add share
       ansible.windows.win_share:
-        name: "{{ item.key }}"
-        description: "{{ item.key }} share"
-        path: "C:\project_share\{{ item.key }}"
+        name: '{{ item.key }}'
+        description: '{{ item.key }} share'
+        path: 'C:\project_share\{{ item.key }}'
         full: Everyone
-      loop: "{{ file_shares | dict2items }}"
+      loop: '{{ file_shares | dict2items }}'
       loop_control:
-        label: "{{ item.key }}"
+        label: '{{ item.key }}'
