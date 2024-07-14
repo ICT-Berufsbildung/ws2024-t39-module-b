@@ -1,61 +1,4 @@
-ad_groups:
-  DL_FS_REMOTE_PROJECT_55_RO:
-  - remote13
-  - remote11
-  - remote16
-  - remote17
-  - remote15
-  - remote4
-  DL_FS_REMOTE_PROJECT_55_RW:
-  - remote7
-  - remote1
-  - remote10
-  - remote2
-  - remote18
-  - remote6
-  DL_FS_REMOTE_PROJECT_63_RO:
-  - remote8
-  - remote16
-  - remote15
-  - remote1
-  - remote9
-  DL_FS_REMOTE_PROJECT_63_RW:
-  - remote7
-  - remote3
-  - remote2
-  - remote4
-  - remote5
-  DL_FS_REMOTE_PROJECT_74_RO:
-  - remote16
-  - remote17
-  - remote10
-  - remote3
-  - remote9
-  DL_FS_REMOTE_PROJECT_74_RW:
-  - remote7
-  - remote13
-  - remote14
-  - remote12
-  - remote15
-  - remote1
-  - remote2
-  - remote4
-  - remote6
-  DL_FS_REMOTE_PROJECT_89_RO:
-  - remote4
-  - remote9
-  - remote16
-  - remote6
-  DL_FS_REMOTE_PROJECT_89_RW:
-  - remote7
-  - remote8
-  - remote13
-  - remote11
-  - remote17
-  - remote15
-  - remote1
-  - remote3
-  - remote5
+---
 file_shares:
   REMOTE_PROJECT_55:
     read: DL_FS_REMOTE_PROJECT_55_RO
@@ -66,6 +9,3 @@ file_shares:
   REMOTE_PROJECT_74:
     read: DL_FS_REMOTE_PROJECT_74_RO
     write: DL_FS_REMOTE_PROJECT_74_RW
-  REMOTE_PROJECT_89:
-    read: DL_FS_REMOTE_PROJECT_89_RO
-    write: DL_FS_REMOTE_PROJECT_89_RW

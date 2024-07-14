@@ -1,0 +1,11 @@
+---
+dns_a_records:
+- name: www.paris.local
+  value: 10.20.0.11
+  zone: paris.local
+- name: internal.paris.local
+  value: 10.20.0.11
+  zone: paris.local
+- name: external.paris.local
+  value: 10.20.0.11
+  zone: paris.local

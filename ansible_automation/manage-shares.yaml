@@ -1,16 +1,22 @@
 ---
 - name: Manage file shares
-  hosts: all
+  hosts: fileserver
   tasks:
-    - name: Create AD groups
+    - name: Create RO AD groups
       microsoft.ad.group:
-        identity: '{{ item.key }}'
+        identity: '{{ item.read }}'
         scope: domainlocal
-        members:
-          set: '{{ item.value | list }}'
-      loop: '{{ ad_groups | dict2items }}'
+      loop: '{{ file_shares }}'
       loop_control:
-        label: '{{ item.key }}'
+        label: '{{ item.name }}'
+
+    - name: Create write AD groups
+      microsoft.ad.group:
+        identity: '{{ item.write }}'
+        scope: domainlocal
+      loop: '{{ file_shares }}'
+      loop_control:
+        label: '{{ item.name }}'
 
     - name: Create file share directory
       ansible.windows.win_file:
@@ -19,24 +25,56 @@
 
     - name: Create file share directory
       ansible.windows.win_file:
-        path: 'C:\project_share\{{ item.key }}'
+        path: 'C:\project_share\{{ item.name }}'
         state: directory
-      loop: '{{ file_shares | dict2items }}'
+      loop: '{{ file_shares }}'
       loop_control:
-        label: '{{ item.key }}'
+        label: '{{ item.name }}'
 
-    - name: Add NTFS permission
-      include_tasks: ntfs-permissions.yaml
-      loop: '{{ file_shares | dict2items }}'
+    - name: Add full control permission
+      ansible.windows.win_acl:
+        user: 'Administrators'
+        path: 'C:\project_share\{{ item.name }}'
+        type: allow
+        rights: FullControl
+      loop: '{{ file_shares }}'
       loop_control:
-        label: '{{ item.key }}'
+        label: '{{ item.name }}'
+
+    - name: Add write permission
+      ansible.windows.win_acl:
+        user: '{{ item.write }}'
+        path: 'C:\project_share\{{ item.name }}'
+        type: allow
+        rights: Modify
+      loop: '{{ file_shares }}'
+      loop_control:
+        label: '{{ item.name }}'
+
+    - name: Add read permission
+      ansible.windows.win_acl:
+        user: '{{ item.read }}'
+        path: 'C:\project_share\{{ item.name }}'
+        type: allow
+        rights: ReadAndExecute
+      loop: '{{ file_shares }}'
+      loop_control:
+        label: '{{ item.name }}'
+
+    - name: Disable inheritance
+      ansible.windows.win_acl_inheritance:
+        path: 'C:\project_share\{{ item.name }}'
+        state: absent
+      loop: '{{ file_shares }}'
+      loop_control:
+        label: '{{ item.name }}'
 
     - name: Add share
       ansible.windows.win_share:
-        name: '{{ item.key }}'
-        description: '{{ item.key }} share'
-        path: 'C:\project_share\{{ item.key }}'
+        name: '{{ item.name }}'
+        description: '{{ item.name }} share'
+        path: 'C:\project_share\{{ item.name }}'
         full: Everyone
-      loop: '{{ file_shares | dict2items }}'
+      loop: '{{ file_shares }}'
       loop_control:
-        label: '{{ item.key }}'
+        label: '{{ item.name }}'

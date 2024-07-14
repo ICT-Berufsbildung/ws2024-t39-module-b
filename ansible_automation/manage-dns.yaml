@@ -1,0 +1,11 @@
+---
+- name: Manage DNS records
+  hosts: dns
+  tasks:
+    - name: Add DNS record
+      win_dns_record:
+        name: "{{ item.name }}"
+        type: "A"
+        value: "{{ item.value }}"
+        zone: "{{ item.zone }}"
+      loop: "{{ dns_a_records }}"

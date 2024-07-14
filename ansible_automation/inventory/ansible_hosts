@@ -7,3 +7,10 @@ file-srv.paris.local
 
 [lyon]
 dc2.lyon.paris.local
+
+[fileserver]
+file-srv.paris.local
+dc2.lyon.paris.local
+
+[dns]
+dc1.paris.local
