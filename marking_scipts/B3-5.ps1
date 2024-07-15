@@ -84,9 +84,9 @@ if ($gpos.Count -eq 0) {
 
         # Final output based on all conditions
         if ($allConditionsMet) {
-            Write-Host "A3-5 component passed" -ForegroundColor Green
+            Write-Host "B3-5 component passed" -ForegroundColor Green
         } else {
-            Write-Host "A3-5 component failed" -ForegroundColor Red
+            Write-Host "B3-5 component failed" -ForegroundColor Red
             Write-Host "Failed policies:" -ForegroundColor Red
             $failedPolicies | ForEach-Object { Write-Host "- $_" -ForegroundColor Red }
         }

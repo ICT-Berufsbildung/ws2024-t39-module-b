@@ -70,9 +70,9 @@ if ($dcInDomain) {
 
     # Check if all conditions passed
     if ($dcInDomain -and ($remoteUsersExist -notcontains $false)) {
-        Write-Host "A12 Component passed." -ForegroundColor Green
+        Write-Host "B12 Component passed." -ForegroundColor Green
     } else {
-        Write-Host "A12 Failed." -ForegroundColor Red
+        Write-Host "B12 Failed." -ForegroundColor Red
     }
 
 } else {

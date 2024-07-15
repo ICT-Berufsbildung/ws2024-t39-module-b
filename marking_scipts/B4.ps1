@@ -38,7 +38,7 @@ foreach ($pso in $passwordSettingsObjects) {
 
 # Output the result
 if ($minPasswordAgeSet) {
-    Write-Host "A4 component passed" -ForegroundColor Green
+    Write-Host "B4 component passed" -ForegroundColor Green
 } else {
-    Write-Host "A4 component failed" -ForegroundColor Red
+    Write-Host "B4 component failed" -ForegroundColor Red
 }

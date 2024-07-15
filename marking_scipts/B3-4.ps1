@@ -29,9 +29,9 @@ if ($gpos.Count -eq 0) {
 
         # Check conditions
         if ($q1Name -eq "LOGON" -and $q1String -like "*powershell.exe*") {
-            Write-Host "A3-4 component passed" -ForegroundColor Green
+            Write-Host "B3-4 component passed" -ForegroundColor Green
         } else {
-            Write-Host "A3-4 component failed" -ForegroundColor Red
+            Write-Host "B3-4 component failed" -ForegroundColor Red
         }
     } else {
         Write-Host "GPO with name 'TECH' not found." -ForegroundColor Red

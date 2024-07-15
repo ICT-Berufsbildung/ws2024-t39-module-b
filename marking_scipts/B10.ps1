@@ -84,7 +84,7 @@ try {
 
 # Final result
 if ($allChecksPassed) {
-    Write-Host "A10 Component passed." -ForegroundColor Green
+    Write-Host "B10 Component passed." -ForegroundColor Green
 } else {
-    Write-Host "A10 Component failed." -ForegroundColor Red
+    Write-Host "B10 Component failed." -ForegroundColor Red
 }

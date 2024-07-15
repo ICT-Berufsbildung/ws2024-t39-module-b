@@ -4,6 +4,7 @@ $dnsRecords = @{
     "internal.paris.local" = "10.20.0.11"
     "external.paris.local" = "10.20.0.11"
     "help.paris.local"     = "10.20.0.11"
+    "app.paris.local"      = "10.20.0.10"
 }
 
 # Initialize a flag to check if all tests pass
@@ -42,7 +43,7 @@ foreach ($record in $dnsRecords.GetEnumerator()) {
 
 # Output final result based on the flag
 if ($allPassed) {
-    Write-Host "A5 component passed" -ForegroundColor Green
+    Write-Host "B5 component passed" -ForegroundColor Green
 } else {
-    Write-Host "A5 component failed" -ForegroundColor Red
+    Write-Host "B5 component failed" -ForegroundColor Red
 }

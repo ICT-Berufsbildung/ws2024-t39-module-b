@@ -87,9 +87,9 @@ foreach ($scope in $scopes) {
 
 # Final result
 if ($allChecksPassed) {
-    Write-Host "A8 component passed." -ForegroundColor Green
+    Write-Host "B8 component passed." -ForegroundColor Green
 } else {
-    Write-Host "A8 component failed." -ForegroundColor Red
+    Write-Host "B8 component failed." -ForegroundColor Red
 }
 
 # Additional output for debugging purposes

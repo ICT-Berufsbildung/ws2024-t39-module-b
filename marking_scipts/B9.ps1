@@ -36,7 +36,7 @@ if ($dfsNamespaceExists) {
 
 # Final result
 if ($allChecksPassed) {
-    Write-Host "A9 Component passed." -ForegroundColor Green
+    Write-Host "B9 Component passed." -ForegroundColor Green
 } else {
-    Write-Host "A9 Component failed." -ForegroundColor Red
+    Write-Host "B9 Component failed." -ForegroundColor Red
 }

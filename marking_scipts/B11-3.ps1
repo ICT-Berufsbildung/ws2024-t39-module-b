@@ -21,8 +21,8 @@ $rrasInstalled = Test-RRASInstallation -computerName $computerName
 
 if ($rrasInstalled) {
     Write-Host "Routing and Remote Access (RRAS) is installed on $computerName." -ForegroundColor Green
-    Write-Host "A11-3 passed." -ForegroundColor Green
+    Write-Host "B11-3 passed." -ForegroundColor Green
 } else {
     Write-Host "Routing and Remote Access (RRAS) is not installed on $computerName." -ForegroundColor Red
-    Write-Host "A11-3 failed." -ForegroundColor Red
+    Write-Host "B11-3 failed." -ForegroundColor Red
 }

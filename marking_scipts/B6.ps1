@@ -30,9 +30,9 @@ $secondarySerial = Get-DnsZoneSerial -dnsServer $secondaryDnsServer -zoneName $z
 if ($primarySerial -eq $null -or $secondarySerial -eq $null) {
     Write-Host "Failed to retrieve the serial numbers from one or both DNS servers" -ForegroundColor Red
 } elseif ($primarySerial -eq $secondarySerial) {
-    Write-Host "A6 component passed" -ForegroundColor Green
+    Write-Host "B6 component passed" -ForegroundColor Green
 } else {
-    Write-Host "A6 component failed" -ForegroundColor Red
+    Write-Host "B6 component failed" -ForegroundColor Red
 }
 
 # Additional output for debugging purposes

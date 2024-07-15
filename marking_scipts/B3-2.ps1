@@ -4,7 +4,7 @@ $domainName = "paris.local"
 
 # Get all GPOs matching the specified name in the domain (case-insensitive search)
 $gpos = Get-GPO -All -Domain $domainName | Where-Object { $_.DisplayName.Trim() -ieq $gpoName.Trim() }
-Write-Host "A3-2 component"
+Write-Host "B3-2 component"
 if ($gpos.Count -eq 0) {
     Write-Host "No GPO named '$gpoName' found in the domain '$domainName'." -ForegroundColor Red
 } elseif ($gpos.Count -gt 1) {

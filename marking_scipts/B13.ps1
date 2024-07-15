@@ -93,9 +93,9 @@ if ($lyonDCInDomain) {
 
     # Check if all checks passed for lyon.paris.local
     if ($lyonAllPassed) {
-        Write-Host "A13 Component for lyon.paris.local passed." -ForegroundColor Green
+        Write-Host "B13 Component for lyon.paris.local passed." -ForegroundColor Green
     } else {
-        Write-Host "A13 Component for lyon.paris.local failed." -ForegroundColor Red
+        Write-Host "B13 Component for lyon.paris.local failed." -ForegroundColor Red
     }
 
 } else {
@@ -105,14 +105,14 @@ if ($lyonDCInDomain) {
 
 # Check if all checks passed for paris.local
 if ($parisAllPassed) {
-    Write-Host "A13 Component for paris.local passed." -ForegroundColor Green
+    Write-Host "B13 Component for paris.local passed." -ForegroundColor Green
 } else {
-    Write-Host "A13 Component for paris.local failed." -ForegroundColor Red
+    Write-Host "B13 Component for paris.local failed." -ForegroundColor Red
 }
 
 # Check overall component status
 if ($parisAllPassed -and $lyonAllPassed) {
-    Write-Host "A13 Component passed." -ForegroundColor Green
+    Write-Host "B13 Component passed." -ForegroundColor Green
 } else {
     Write-Host "Failed." -ForegroundColor Red
 }
