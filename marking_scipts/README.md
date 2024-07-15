@@ -10,6 +10,7 @@ Run with Powershell ISE
 | B3-4.ps1             | DC1         |
 | B3-5.ps1             | DC1         |
 | B3-6.ps1             | DC1         |
+| B3-7.ps1             | DC1         |
 | B4.ps1               | DC1         |
 | B5.ps1               | DC1         |
 | B6.ps1               | DC1         |
