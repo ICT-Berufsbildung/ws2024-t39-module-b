@@ -17,18 +17,16 @@ if ($gpos.Count -eq 0) {
     
     # Load XML content properly
     [xml]$gpoXml = $gpoReport
-
+    
     $xml = [xml]$gpoReport
-    # Check if GPO Name is "TECH"
-    # Check if GPO Name is "TECH"
     if ($xml.GPO.Name -eq "TECH") {
-        # Retrieve q1:Name and q1:String from ExtensionData
-        $extensionData = $xml.GPO.Computer.ExtensionData
-        $q1Name = $extensionData.Extension.ScheduledTasks.Task.Properties.Triggers.Trigger.type
-        $q1String = $extensionData.Extension.ScheduledTasks.Task.Properties.appName
-
+        $extensionData = $xml.GPO.User.ExtensionData
+        $q1Name = $extensionData.Extension.ScheduledTasks.TaskV2.Properties.Task.Triggers.LogonTrigger.Enabled
+        $q1String = $extensionData.Extension.ScheduledTasks.TaskV2.Properties.Task.Actions.Exec.Command
+        Write-Host $q1Name
+        Write-Host $q1String
         # Check conditions
-        if ($q1Name -eq "LOGON" -and $q1String -like "*powershell.exe*") {
+        if ($q1Name -eq "true" -and $q1String -like "*powershell.exe*") {
             Write-Host "B3-4 component passed" -ForegroundColor Green
         } else {
             Write-Host "B3-4 component failed" -ForegroundColor Red

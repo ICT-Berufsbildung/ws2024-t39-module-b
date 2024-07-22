@@ -28,8 +28,7 @@ $XPath = "//q1:SecurityOptions[q1:KeyName='MACHINE\Software\Microsoft\Windows\Cu
 
 # Check if the setting is present and retrieve its value
 $Setting = $GPOReport.SelectSingleNode($XPath, $namespaceManager)
-
-
+$Value = $Setting.InnerText
 
 if ($Setting) {
     $Value = $Setting.InnerText
@@ -38,6 +37,7 @@ if ($Setting) {
     if ($Value -eq $ExpectedMessage) {
         Write-Output "The 'Interactive logon: Message text for users attempting to log on' setting is configured with the expected message."
         Write-Host "B3-1 component"
+        Write-Output "Configured: " $Value
         Write-Host "passed" -ForegroundColor Green
     } else {
         Write-Output "The 'Interactive logon: Message text for users attempting to log on' setting is configured, but the message does not match the expected message."
@@ -53,5 +53,3 @@ if ($Setting) {
 
 # Cleanup
 Remove-Item -Path $ReportPath -Force
-
-

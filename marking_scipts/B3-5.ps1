@@ -1,11 +1,8 @@
 ﻿# Import the GroupPolicy module
 Import-Module GroupPolicy
-
-# Define the GPO name
 $gpoName = "SALES"
 $domainName = "paris.local"
 $gpos = Get-GPO -All -Domain $domainName | Where-Object { $_.DisplayName.Trim() -ieq $gpoName.Trim() }
-# Define the registry paths and values for the policies
 $cmdPolicyPath = "HKCU\Software\Policies\Microsoft\Windows\System"
 $cmdPolicyName = "DisableCMD"
 $runMenuPolicyPath = "HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer"
@@ -27,19 +24,9 @@ function Check-GPOPolicy {
     }
 }
 
-# Check the policies
-#$cmdPolicyValue = Check-GPOPolicy -GPOName $gpoName -Path $cmdPolicyPath -Name $cmdPolicyName
+
 $runMenuPolicyValue = Check-GPOPolicy -GPOName $gpoName -Path $runMenuPolicyPath -Name $runMenuPolicyName
-
-# Output the results
-#if ($cmdPolicyValue -ne $null -and $cmdPolicyValue.Value -eq 1) {
-#    Write-Host "Prevent access to the command prompt policy is enabled in the SALES GPO" -ForegroundColor Green
-#} else {
-#    Write-Host "Prevent access to the command prompt policy is not enabled in the SALES GPO" -ForegroundColor Red
-#}
-
-
-
+Write-Host $runMenuPolicyValue.Value
 if ($gpos.Count -eq 0) {
     Write-Host "No GPO named '$gpoName' found in the domain '$domainName'." -ForegroundColor Red
 } elseif ($gpos.Count -gt 1) {
@@ -64,6 +51,7 @@ if ($gpos.Count -eq 0) {
 
         # Check if "Prevent access to the command prompt" is enabled
         $preventCmdPolicy = $gpoXml.GPO.User.ExtensionData.Extension.Policy | Where-Object { $_.Name -eq "Prevent access to the command prompt" }
+        Write-Host $preventCmdPolicy
         if ($preventCmdPolicy -ne $null -and $preventCmdPolicy.State -eq "Enabled") {
             Write-Host "'Prevent access to the command prompt' is enabled" -ForegroundColor Yellow
         } else {

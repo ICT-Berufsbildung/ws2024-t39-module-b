@@ -26,7 +26,8 @@ if ($gpos.Count -eq 0) {
         # Check conditions
         $condition2 = $gpoXml.SelectSingleNode("//q1:DropDownList[q1:Name='Scheduled install day: ']/q1:Value/q1:Name", $ns).'#text' -eq "6 - Every Friday"
         $condition3 = $gpoXml.SelectSingleNode("//q1:DropDownList[q1:Name='Scheduled install time:']/q1:Value/q1:Name", $ns).'#text' -eq "13:00"
-
+        Write-Host $gpoXml.SelectSingleNode("//q1:DropDownList[q1:Name='Scheduled install day: ']/q1:Value/q1:Name", $ns).'#text'
+        Write-Host $gpoXml.SelectSingleNode("//q1:DropDownList[q1:Name='Scheduled install time:']/q1:Value/q1:Name", $ns).'#text'
         if ($condition2 -and $condition3) {
             Write-Host "passed" -ForegroundColor Green
         } else {

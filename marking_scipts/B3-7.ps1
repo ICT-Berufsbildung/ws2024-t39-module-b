@@ -1,7 +1,10 @@
-﻿# Define the GPO name and domain
-$gpoName = "NOTECH"
+﻿$gpoName = "NOTECH"
 $domainName = "paris.local"
 $checkScope = $false
+# Define the GPO name and domain
+$userNoRegistry = $false
+$turnOffFileHistStatus = $false
+
 try {
     # Get the GPO
     $gpo = Get-GPO -Name $gpoName -Domain $domainName -ErrorAction Stop
@@ -52,13 +55,6 @@ try {
 } catch {
     Write-Host "Failed to retrieve or check GPO '$gpoName' in the domain '$domainName'. Error: $($_.Exception.Message)" -ForegroundColor Red
 }
-
-# Define the GPO name and domain
-$gpoName = "NOTECH"
-$domainName = "paris.local"
-
-$userNoRegistry = $false
-$turnOffFileHistStatus = $false
 
 try {
     # Get the GPO
