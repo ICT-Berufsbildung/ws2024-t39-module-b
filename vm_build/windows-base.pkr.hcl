@@ -7,14 +7,9 @@ packer {
   }
 }
 
-variable "winsrv_iso_url" {
+variable "winsrv_iso_path" {
   type    = string
-  default = "https://software-static.download.prss.microsoft.com/sg/download/888969d5-f34g-4e03-ac9d-1f9786c66749/SERVER_EVAL_x64FRE_en-us.iso"
-}
-
-variable "winsrv_iso_checksum" {
-  type    = string
-  default = "sha256:e215493d331ebd57ea294b2dc96f9f0d025bc97b801add56ef46d8868d810053"
+  default = "ISO/en-us_windows_server_2022_updated_july_2023_x64_dvd_541692c3.iso"
 }
 
 
@@ -47,9 +42,31 @@ variable "esx_vm_network" {
   default = "VM Network"
 }
 
+locals {
+  vm_name_prefix = "wsc2024-mod-b"
+  floppy_files_winsrv = [
+      "scripts/win11/provision-autounattend.ps1",
+      "scripts/win11/provision-openssh.ps1",
+      "scripts/win11/provision-psremoting.ps1",
+      "scripts/win11/provision-pwsh.ps1",
+      "scripts/win11/provision-vmtools.ps1",
+      "scripts/win11/provision-winrm.ps1",
+      "scripts/winsrv/Autounattend.xml",
+    ]
+    floppy_files_core = [
+      "scripts/win11/provision-autounattend.ps1",
+      "scripts/win11/provision-openssh.ps1",
+      "scripts/win11/provision-psremoting.ps1",
+      "scripts/win11/provision-pwsh.ps1",
+      "scripts/win11/provision-vmtools.ps1",
+      "scripts/win11/provision-winrm.ps1",
+      "scripts/winsrv-core/Autounattend.xml",
+    ]
+}
+
 source "vsphere-iso" "winsrv-base" {
   CPUs          = 4
-  RAM           = 4096
+  RAM           = 6144
   guest_os_type = "windows2019srvNext_64Guest"
   disk_controller_type = ["pvscsi"]
   host                 = var.esx_host
@@ -57,7 +74,7 @@ source "vsphere-iso" "winsrv-base" {
   insecure_connection  = true
   cdrom_type           = "sata"
   iso_paths            = [
-    "[${var.esx_iso_datastore}] ISO/en-us_windows_server_2022_updated_july_2023_x64_dvd_541692c3.iso"
+    "[${var.esx_iso_datastore}] ${var.winsrv_iso_path}"
   ]
   password             = var.esx_password
   storage {
@@ -68,78 +85,163 @@ source "vsphere-iso" "winsrv-base" {
     network_card = "vmxnet3"
     network = var.esx_vm_network
   }
+  export {
+      output_format = "ova"
+      output_directory = "./outputs"
+  }
   username       = "root"
   vcenter_server = var.esx_host
   http_port_min  = 5100
   http_port_max  = 5150
 
   http_directory           = "http"
-  shutdown_command         = "C:\System32\Sysprep\Sysprep.exe /oobe /generalize /shutdown"
+  shutdown_command         = "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\""
   communicator             = "ssh"
   ssh_username             = "Administrator"
-  ssh_password             = "AllTooWell13@"
+  ssh_password             = "Skill39@Lyon"
   ssh_timeout              = "4h"
   ssh_file_transfer_method = "sftp"
 }
 
+source "vsphere-iso" "win11-base" {
+  CPUs          = 4
+  RAM           = 6144
+  guest_os_type = "windows9_64Guest"
+  disk_controller_type = ["pvscsi"]
+  host                 = var.esx_host
+  datastore            = var.esx_datastore
+  insecure_connection  = true
+  password             = var.esx_password
+  storage {
+    disk_size             = 32768
+    disk_thin_provisioned = true
+  }
+  network_adapters {
+    network_card = "vmxnet3"
+    network = var.esx_vm_network
+  }
+  export {
+      output_format = "ova"
+      output_directory = "./outputs"
+  }
+  username       = "root"
+  vcenter_server = var.esx_host
+  communicator             = "none"
+}
+
 build {
   # Build Windows server with GUI
+  sources = ["vsphere-iso.winsrv-base"]
   source "vsphere-iso.winsrv-base" {
-    vm_name     = "windows-2022-base"
-    floppy_files = [
-      "scripts/win11/provision-autounattend.ps1",
-      "scripts/win11/provision-openssh.ps1",
-      "scripts/win11/provision-psremoting.ps1",
-      "scripts/win11/provision-pwsh.ps1",
-      "scripts/win11/provision-vmtools.ps1",
-      "scripts/win11/provision-winrm.ps1",
-      "scripts/winsrv/Autounattend.xml",
-    ]
-
+    name = "dc1"
+    vm_name     = "${local.vm_name_prefix}-dc1"
+    floppy_files = local.floppy_files_winsrv
   }
 
   # Build Windows server core
   source "vsphere-iso.winsrv-base" {
-    name = "winsrv-core-base"
-    vm_name     = "windows-2022-core-base"
-    floppy_files = [
-      "scripts/win11/provision-autounattend.ps1",
-      "scripts/win11/provision-openssh.ps1",
-      "scripts/win11/provision-psremoting.ps1",
-      "scripts/win11/provision-pwsh.ps1",
-      "scripts/win11/provision-vmtools.ps1",
-      "scripts/win11/provision-winrm.ps1",
-      "scripts/winsrv-core/Autounattend.xml",
+    name = "nw-srv"
+    vm_name     = "${local.vm_name_prefix}-nw-srv"
+    floppy_files = local.floppy_files_core
+  }
+
+  source "vsphere-iso.winsrv-base" {
+    name = "file-srv"
+    vm_name     = "${local.vm_name_prefix}-file-srv"
+    floppy_files = local.floppy_files_winsrv
+  }
+
+
+  source "vsphere-iso.winsrv-base" {
+    name = "web-srv"
+    vm_name     = "${local.vm_name_prefix}-web-srv"
+    floppy_files = local.floppy_files_winsrv
+  }
+
+  source "vsphere-iso.winsrv-base" {
+    name = "paris-router"
+    vm_name     = "${local.vm_name_prefix}-paris-router"
+    floppy_files = local.floppy_files_winsrv
+
+    network_adapters {
+      network_card = "vmxnet3"
+      network = "wsc"
+    }
+
+    network_adapters {
+      network_card = "vmxnet3"
+      network = "wsc"
+    }
+
+    network_adapters {
+      network_card = "vmxnet3"
+      network = "wsc"
+    }
+  }
+
+  source "vsphere-iso.winsrv-base" {
+    name = "la-router"
+    vm_name     = "${local.vm_name_prefix}-la-router"
+    floppy_files = local.floppy_files_winsrv
+
+    network_adapters {
+      network_card = "vmxnet3"
+      network = "wsc"
+    }
+  }
+
+  source "vsphere-iso.winsrv-base" {
+    name = "lyon-router"
+    vm_name     = "${local.vm_name_prefix}-lyon-router"
+    floppy_files = local.floppy_files_winsrv
+
+    network_adapters {
+      network_card = "vmxnet3"
+      network = "wsc"
+    }
+
+  }
+
+  source "vsphere-iso.winsrv-base" {
+    name = "dc2"
+    vm_name     = "${local.vm_name_prefix}-dc2"
+    floppy_files = local.floppy_files_winsrv
+  }
+
+  provisioner "powershell" {
+    use_pwsh = true
+    scripts   = [
+      "scripts/win11/disable-windows-updates.ps1",
+      "scripts/win11/disable-windows-defender.ps1"
     ]
   }
 
   provisioner "powershell" {
     use_pwsh = true
-    script   = "scripts/win11/disable-windows-updates.ps1"
-  }
-
-  provisioner "powershell" {
-    use_pwsh = true
-    script   = "scripts/win11/disable-windows-defender.ps1"
+    inline = ["Rename-Computer -NewName ${replace(source.name, "${local.vm_name_prefix}-", "")}"]
   }
 
   provisioner "windows-restart" {
   }
 
   provisioner "powershell" {
-    use_pwsh = true
-    script   = "scripts/win11/enable-remote-desktop.ps1"
-  }
-
-  provisioner "powershell" {
-    script   = "scripts/win11/optimize-powershell.ps1"
-  }
-
-  provisioner "powershell" {
-    inline = [
-      "(New-Object System.Net.WebClient).DownloadFile('https://download.microsoft.com/download/E/9/8/E9849D6A-020E-47E4-9FD0-A023E99B54EB/requestRouter_amd64.msi', 'C:\\Users\\Administrator\\Desktop\\requestRouter_amd64.msi')",
-      "(New-Object System.Net.WebClient).DownloadFile('https://download.microsoft.com/download/1/2/8/128E2E22-C1B9-44A4-BE2A-5859ED1D4592/rewrite_amd64_en-US.msi', 'C:\\Users\\Administrator\\Desktop\\rewrite_amd64_en-US.msi')",
+    scripts   = [
+      "scripts/win11/enable-remote-desktop.ps1",
+      "scripts/win11/optimize-powershell.ps1",
+      "scripts/winsrv/provision-base.ps1"
     ]
   }
+}
 
+build {
+  sources = ["vsphere-iso.win11-base"]
+  source "vsphere-iso.win11-base" {
+    name = "win-client1"
+    vm_name     = "${local.vm_name_prefix}-win-client1"
+  }
+
+  source "vsphere-iso.win11-base" {
+    name = "win-client2"
+    vm_name     = "${local.vm_name_prefix}-win-client2"
+  }
 }

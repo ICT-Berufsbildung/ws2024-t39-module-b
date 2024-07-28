@@ -83,13 +83,13 @@
             <TimeZone>UTC</TimeZone>
             <UserAccounts>
                 <AdministratorPassword>
-                    <Value>AllTooWell13@</Value>
+                    <Value>Skill39@Lyon</Value>
                     <PlainText>true</PlainText>
                 </AdministratorPassword>
             </UserAccounts>
             <AutoLogon>
                 <Password>
-                    <Value>AllTooWell13@</Value>
+                    <Value>Skill39@Lyon</Value>
                     <PlainText>true</PlainText>
                 </Password>
                 <Enabled>true</Enabled>

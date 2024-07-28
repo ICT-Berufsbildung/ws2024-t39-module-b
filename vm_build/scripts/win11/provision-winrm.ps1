@@ -34,7 +34,8 @@ if (!(New-Object System.Security.Principal.WindowsPrincipal(
 #    in windows client 10, we must set the network interface profile.
 Get-NetConnectionProfile `
     | Where-Object {$_.NetworkCategory -ne 'DomainAuthenticated'} `
-    | Set-NetConnectionProfile -NetworkCategory Private
+    | Where-Object {$_.NetworkCategory -ne 'Identifying...'} `
+    | Set-NetConnectionProfile -NetworkCategory Private -ErrorAction SilentlyContinue
 
 # configure WinRM.
 Write-Output 'Configuring WinRM...'

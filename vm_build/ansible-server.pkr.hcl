@@ -53,7 +53,7 @@ source "vsphere-iso" "base" {
     "[${var.esx_iso_datastore}] ISO/debian-12.5.0-amd64-netinst.iso"
   ]
   password             = var.esx_password
-  ssh_password         = "AllTooWell13@"
+  ssh_password         = "Skill39@Lyon"
   ssh_username         = "appadmin"
   storage {
     disk_size             = 32768
@@ -80,7 +80,7 @@ build {
   }
 
   provisioner "shell" {
-    execute_command = "chmod +x {{ .Path }}; echo 'AllTooWell13@' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
+    execute_command = "chmod +x {{ .Path }}; echo 'Skill39@Lyon' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
     script = "./scripts/prepare-ansible-srv.sh"
   }
 

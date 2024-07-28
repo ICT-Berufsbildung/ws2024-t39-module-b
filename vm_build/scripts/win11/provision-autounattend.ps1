@@ -29,7 +29,6 @@ $systemVendor = (Get-CimInstance -ClassName Win32_ComputerSystemProduct -Propert
     'provision-winrm'
     'provision-psremoting'
     'provision-openssh'
-    'provision-vmtools'
 ) | ForEach-Object {
     Join-Path $PSScriptRoot "$_.ps1"
 } | Where-Object {
