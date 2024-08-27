@@ -105,7 +105,7 @@ source "vsphere-iso" "winsrv-base" {
 
 source "vsphere-iso" "win11-base" {
   CPUs          = 4
-  RAM           = 6144
+  RAM           = 8192
   guest_os_type = "windows9_64Guest"
   disk_controller_type = ["pvscsi"]
   host                 = var.esx_host
@@ -214,11 +214,6 @@ build {
       "scripts/win11/disable-windows-updates.ps1",
       "scripts/win11/disable-windows-defender.ps1"
     ]
-  }
-
-  provisioner "powershell" {
-    use_pwsh = true
-    inline = ["Rename-Computer -NewName ${replace(source.name, "${local.vm_name_prefix}-", "")}"]
   }
 
   provisioner "windows-restart" {
