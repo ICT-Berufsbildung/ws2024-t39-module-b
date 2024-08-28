@@ -1,8 +1,8 @@
 ---
 file_shares:
-  - name: REMOTE_PROJECT_55:
+  - name: REMOTE_PROJECT_55
     read: DL_FS_REMOTE_PROJECT_55_RO
     write: DL_FS_REMOTE_PROJECT_55_RW
-  - name: REMOTE_PROJECT_63:
+  - name: REMOTE_PROJECT_63
     read: DL_FS_REMOTE_PROJECT_63_RO
     write: DL_FS_REMOTE_PROJECT_63_RW

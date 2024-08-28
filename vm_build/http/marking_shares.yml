@@ -1,0 +1,14 @@
+---
+file_shares:
+  - name: HR_PROJECT_40
+    read: DL_FS_HR_PROJECT_40_RO
+    write: DL_FS_HR_PROJECT_40_RW
+  - name: HR_PROJECT_78
+    read: DL_FS_HR_PROJECT_78_RO
+    write: DL_FS_HR_PROJECT_78_RW
+  - name: HR_PROJECT_87
+    read: DL_FS_HR_PROJECT_87_RO
+    write: DL_FS_HR_PROJECT_87_RW
+  - name: SECRET_PROJECT_31
+    read: DL_FS_SECRET_PROJECT_31_RO
+    write: DL_FS_SECRET_PROJECT_31_RW

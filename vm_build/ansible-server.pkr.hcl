@@ -36,9 +36,13 @@ variable "esx_vm_network" {
   default = "VM Network"
 }
 
+variable "marking_secret" {
+  type    = string
+}
+
 source "vsphere-iso" "base" {
-  CPUs         = 2
-  RAM          = 2048
+  CPUs         = 4
+  RAM          = 6144
   boot_command = [
     "<esc><wait>",
     "auto url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg interface=ens192<wait>", "<enter><wait>"
@@ -65,6 +69,11 @@ source "vsphere-iso" "base" {
   http_port_min  = 5100
   http_port_max  = 5150
 
+  export {
+      output_format = "ova"
+      output_directory = "./outputs"
+  }
+
 }
 
 # ANSIBLE-SRV
@@ -72,11 +81,21 @@ build {
   name = "ANSIBLE-SRV"
   sources = ["source.vsphere-iso.base"]
   source "source.vsphere-iso.base" {
-    vm_name = "ANSIBLE-SRV"
+    vm_name = "wsc2024-mod-b-ansible-srv"
     network_adapters {
       network_card = "vmxnet3"
       network = var.esx_vm_network
     }
+  }
+
+  provisioner "shell-local" {
+    inline = ["echo -n ${var.marking_secret} | openssl aes-256-cbc -a -pbkdf2 -in ./http/marking_shares.yml -out ./http/ansible_marking.enc -pass stdin"]
+  }
+
+  provisioner "file" {
+    generated = true
+    source = "./http/ansible_marking.enc"
+    destination = "/tmp/marking.enc"
   }
 
   provisioner "shell" {
